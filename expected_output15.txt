@@ -1,2 +1,0 @@
-Error - unclosed string literal
-Syntax analysis failed.

@@ -1,2 +1,0 @@
-Syntax analysis failed.
-syntax_analyzer_error - Missing semi colon at line 8

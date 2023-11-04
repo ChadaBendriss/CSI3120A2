@@ -1,2 +1,0 @@
-Syntax analysis failed.
-syntax_analyzer_error - String assignment error at line 9
