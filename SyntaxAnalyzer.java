@@ -19,7 +19,7 @@ public class SyntaxAnalyzer {
      public static boolean openparen=true;
     public static void main(String[] args) {
         try {
-            LexicalAnalyzer.in_fp = new BufferedReader(new FileReader("input20.txt"));
+            LexicalAnalyzer.in_fp = new BufferedReader(new FileReader("TestCases\\input20.txt"));
             LexicalAnalyzer.getChar();
 
             do {
