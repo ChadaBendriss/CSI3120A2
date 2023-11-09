@@ -256,7 +256,7 @@ public class LexicalAnalyzer {
         while (Character.isWhitespace(nextChar) && charClass != EOF)
         
             getChar();
-            System.out.println(nextChar);
+            //System.out.println(nextChar);
     }
 
     /* lex - a simple lexical analyzer for arithmetic expressions */
@@ -265,7 +265,7 @@ public class LexicalAnalyzer {
         lexeme = new StringBuilder();
         getNonBlank();
         String specialChar = "(+-/*<>)";
-        System.out.println("charclass "+charClass);
+        //System.out.println("charclass "+charClass);
 
         switch (charClass) {
             /* Parse identifiers or keywords */
@@ -334,11 +334,11 @@ public class LexicalAnalyzer {
             case EOF:
                 nextToken = EOF;
                 lexeme = new StringBuilder("EOF");
-                System.out.println("here");
+                //System.out.println("here");
                 break;
         }
         /* End of switch */
-        System.out.printf("Next token is: %d, Next lexeme is %s", nextToken, lexeme);
-        System.out.printf("\t%s\n", error);
+        //System.out.printf("Next token is: %d, Next lexeme is %s", nextToken, lexeme);
+        //System.out.printf("\t%s\n", error);
     }
 }

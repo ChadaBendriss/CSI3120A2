@@ -25,7 +25,7 @@ public class SyntaxAnalyzer {
             do {
                 LexicalAnalyzer.lex();
                 int token = LexicalAnalyzer.nextToken;
-                System.out.println("string "+token+'\n');
+                //System.out.println("string "+token+'\n');
                 //System.out.println("new line"+LexicalAnalyzer.lineNum);
                   
 
@@ -33,7 +33,7 @@ public class SyntaxAnalyzer {
                     break;
                 }
                 
-                System.out.println('x');
+                //System.out.println('x');
                 
 
                 switch (token) {
@@ -44,7 +44,7 @@ public class SyntaxAnalyzer {
                     
                     
                         stack.push(token);
-                        System.out.println(stack.lastElement());
+                        //System.out.println(stack.lastElement());
                         expectDataTypeOrIdent = true;
                         expectOperandOrDataType = false;
                         expectOperator = false;
@@ -52,7 +52,8 @@ public class SyntaxAnalyzer {
                         break;
                     case LexicalAnalyzer.RIGHT_PAREN:
                     if (stack.isEmpty() || stack.pop() != LexicalAnalyzer.LEFT_PAREN) {
-                            System.err.println("Error - Unmatched )" + token + " at line " + LexicalAnalyzer.lineNum);
+                        System.out.println("Syntax analysis failed.");
+                            System.err.println("syntax_analyzer_error - Unmatched closing ) at line " + LexicalAnalyzer.lineNum);
                             
                             return;
                         }
@@ -67,11 +68,12 @@ public class SyntaxAnalyzer {
                     case LexicalAnalyzer.RIGHT_BRACE:
                     
                     if (stack.isEmpty() || stack.pop() != LexicalAnalyzer.LEFT_BRACE) {
-                            System.err.println("Error - Unmatched closing }"  + " at line " + LexicalAnalyzer.lineNum);
-                            System.out.println("here 2");
+                        System.out.println("Syntax analysis failed.");
+                            System.err.println("syntax_analyzer_error - Unmatched closing } at line " + LexicalAnalyzer.lineNum);
+                            //System.out.println("here 2");
                             return;
                         }
-                       System.out.println("here");
+                       //System.out.println("here");
                         expectDataTypeOrIdent = true;
                         expectOperandOrDataType = false;
                         expectOperator = false;
@@ -81,6 +83,7 @@ public class SyntaxAnalyzer {
                         break;
                     case LexicalAnalyzer.RIGHT_BRACKET:
                         if (stack.isEmpty() || stack.pop() != LexicalAnalyzer.LEFT_BRACKET) {
+                            System.out.println("Syntax analysis failed");
                             System.err.println("Error - Unmatched ]" + token + " at line " + LexicalAnalyzer.lineNum);
                           
                             return;
@@ -98,6 +101,7 @@ public class SyntaxAnalyzer {
                             expectDataTypeOrIdent=false;
                            expectsemiColum = false;
                         } else {
+                            System.out.println("Syntax analysis failed");
                             System.err.println("Syntax error - Unexpected assignment operator at line " + LexicalAnalyzer.lineNum);
                             return;
                         }
@@ -105,6 +109,7 @@ public class SyntaxAnalyzer {
                     case LexicalAnalyzer.SEMICOLON:
                         // After a semicolon, we expect a new statement, so we should expect a data type or identifier again.
                         if(expectOperandOrDataType ){
+                            System.out.println("Syntax analysis failed");
                              System.err.println("Syntax error - Unexpected semi colon operator at line " + LexicalAnalyzer.lineNum);
                             return;
                         }
@@ -123,16 +128,21 @@ public class SyntaxAnalyzer {
                              expectDataTypeOrIdent = false;
                              expectOperandOrDataType = false;
                              expectsemiColum = true;
-                        } else if(expectOperator && !expectOperandOrDataType){
-                            System.err.println("Syntax error - String assignment error at line " + LexicalAnalyzer.lineNum);
-                            return;
-                        }
-                        else if(expectsemiColum && !expectOperandOrDataType){
-                            System.err.println("Syntax error - Missing semi colon at line " + LexicalAnalyzer.lineNum);
+                        } else if(expectsemiColum && !expectOperandOrDataType){
+                            System.out.println("Syntax analysis failed.");
+                            System.err.println("syntax_analyzer_error - Missing semi colon at line " + LexicalAnalyzer.lineNum);
                             return;
 
                         }
+
+                        else if(expectOperator && !expectOperandOrDataType){
+                            System.out.println("Syntax analysis failed");
+                            System.err.println("Syntax error - String assignment error at line " + LexicalAnalyzer.lineNum);
+                            return;
+                        }
+                        
                         else if (!expectOperandOrDataType) {
+                            System.out.println("Syntax analysis failed");
                             System.err.println("Syntax error - Unexpected datatype declaration at line " + LexicalAnalyzer.lineNum);
                             return;
                         }
@@ -141,12 +151,14 @@ public class SyntaxAnalyzer {
                         expectsemiColum = true;
                         break;
                     case LexicalAnalyzer.IDENT:
-                         System.out.println(openparen);
+                         //System.out.println(openparen);
                          if(openparen){
-                            System.err.println("Syntax error - Missing open ( " + LexicalAnalyzer.lineNum);
+                            System.out.println("Syntax analysis failed.");
+                            System.err.println("syntax_analyzer_error - Missing '(' at line " + LexicalAnalyzer.lineNum);
                             return;
                         }
                         if (!expectDataTypeOrIdent ) {
+                            System.out.println("Syntax analysis failed");
                             System.err.println("Syntax error - Unexpected identifier at line " + LexicalAnalyzer.lineNum);
                             return;
                         }
@@ -166,11 +178,13 @@ public class SyntaxAnalyzer {
                     case LexicalAnalyzer.MULT_OP:
                     case LexicalAnalyzer.DIV_OP:
                     if(openparen==true){
+                        System.out.println("Syntax analysis failed");
                             System.err.println("Syntax error - UMissing open ) " + LexicalAnalyzer.lineNum);
                             return;
                         }
                         if (!expectOperator) {
-                            System.err.println("Syntax error - Missing operand before operator at line " + LexicalAnalyzer.lineNum);
+                            System.out.println("Syntax analysis failed");
+                            System.err.println("syntax_analyzer_error - Missing operand before operator at line " + LexicalAnalyzer.lineNum);
                             return;
                         } 
                         else {
@@ -180,6 +194,7 @@ public class SyntaxAnalyzer {
                         break;
                     case LexicalAnalyzer.EQUALS:
                     if(openparen==true){
+                        System.out.println("Syntax analysis failed");
                             System.err.println("Syntax error - UMissing open ) " + LexicalAnalyzer.lineNum);
                             return;
                         }
@@ -196,8 +211,9 @@ public class SyntaxAnalyzer {
                         break;
 
                     case LexicalAnalyzer.GREATER_THAN:
-                    System.out.println(expectDataTypeOrIdent);
+                    //System.out.println(expectDataTypeOrIdent);
                     if(openparen==true){
+                        System.out.println("Syntax analysis failed");
                             System.err.println("Syntax error - UMissing open ) " + LexicalAnalyzer.lineNum);
                             return;
                         }
@@ -216,6 +232,7 @@ public class SyntaxAnalyzer {
 
                     case LexicalAnalyzer.LESS_THAN:
                     if(openparen==true){
+                        System.out.println("Syntax analysis failed");
                             System.err.println("Syntax error - UMissing open ) " + LexicalAnalyzer.lineNum);
                             return;
                         }
@@ -235,7 +252,8 @@ public class SyntaxAnalyzer {
                    
                     case  LexicalAnalyzer.FOR :
                        if ( expectsemiColum ){
-                        System.err.println("Syntax error - Missing  semi colum at line " + LexicalAnalyzer.lineNum);
+                        System.out.println("Syntax analysis failed");
+                        System.err.println("syntax_analyzer_error - Missing semi colon at line " + LexicalAnalyzer.lineNum);
                         return ;
                        }
                        openparen=true;
@@ -248,7 +266,8 @@ public class SyntaxAnalyzer {
 
                        case  LexicalAnalyzer.WHILE :
                        if ( expectsemiColum ){
-                        System.err.println("Syntax error - Missing  semi colum at line " + LexicalAnalyzer.lineNum);
+                        System.out.println("Syntax analysis failed");
+                        System.err.println("syntax_analyzer_error - Missing semi colon at line " + LexicalAnalyzer.lineNum);
                         return ;
                        }
                        openparen=true;
@@ -261,7 +280,8 @@ public class SyntaxAnalyzer {
 
                        case  LexicalAnalyzer.IF :
                        if ( expectsemiColum ){
-                        System.err.println("Syntax error - Missing  semi colum at line " + LexicalAnalyzer.lineNum);
+                        System.out.println("Syntax analysis failed");
+                        System.err.println("syntax_analyzer_error - Missing semi colon at line " + LexicalAnalyzer.lineNum);
                         return ;
                        }
                        openparen=true;
@@ -287,12 +307,12 @@ public class SyntaxAnalyzer {
                 // for (int i=0;i<stack.size();i++){
                 //     System.out.println(stack.indexOf(i));
                 // }
-                System.out.println("here3");
+                //System.out.println("here3");
                 
             } while (LexicalAnalyzer.nextToken != LexicalAnalyzer.EOF);
             //while(true);
         for (int i=0;i<stack.size();i++){
-                  System.out.println(stack.indexOf(i));
+                  //System.out.println(stack.indexOf(i));
                  }
 
             // if (!stack.isEmpty()) {
@@ -303,12 +323,13 @@ public class SyntaxAnalyzer {
             
             while (!stack.isEmpty()) {
                 int unmatchedToken = stack.pop();
-                System.err.println("Error - Unmatched symbol " + unmatchedToken+" at the end of code  failed");
+                System.out.println("Syntax analysis failed.");
+                //System.err.println("Error - Unmatched symbol " + unmatchedToken+" at the end of code  failed");
                 stackempty=false;
             }
 
             if (stackempty ) {
-                System.out.println("Syntax analysis completed successfully!");
+                System.out.println("Syntax analysis succeed");
             }
         } catch (IOException e) {
             System.err.println("ERROR - cannot open input11.txt");
