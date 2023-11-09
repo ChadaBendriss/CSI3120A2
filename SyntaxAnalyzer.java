@@ -19,7 +19,7 @@ public class SyntaxAnalyzer {
      public static boolean openparen=true;
     public static void main(String[] args) {
         try {
-            LexicalAnalyzer.in_fp = new BufferedReader(new FileReader("TestCases\\input20.txt"));
+            LexicalAnalyzer.in_fp = new BufferedReader(new FileReader("TestCases\\input7.txt"));
             LexicalAnalyzer.getChar();
 
             do {
@@ -128,18 +128,20 @@ public class SyntaxAnalyzer {
                              expectDataTypeOrIdent = false;
                              expectOperandOrDataType = false;
                              expectsemiColum = true;
-                        } else if(expectsemiColum && !expectOperandOrDataType){
+                        } else if(expectOperator && !expectOperandOrDataType && expectsemiColum ){
+                            System.out.println("Syntax analysis failed");
+                            System.err.println("Syntax error - String assignment error at line " + LexicalAnalyzer.lineNum);
+                            return;
+                        }
+                        
+                        else if(expectsemiColum && !expectOperandOrDataType){
                             System.out.println("Syntax analysis failed.");
                             System.err.println("syntax_analyzer_error - Missing semi colon at line " + LexicalAnalyzer.lineNum);
                             return;
 
                         }
 
-                        else if(expectOperator && !expectOperandOrDataType){
-                            System.out.println("Syntax analysis failed");
-                            System.err.println("Syntax error - String assignment error at line " + LexicalAnalyzer.lineNum);
-                            return;
-                        }
+                        
                         
                         else if (!expectOperandOrDataType) {
                             System.out.println("Syntax analysis failed");

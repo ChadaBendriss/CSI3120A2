@@ -59,7 +59,7 @@ public class LexicalAnalyzer {
     public static void main(String[] args) {
         /* Open the input data file and process its contents */
         try {
-            in_fp = new BufferedReader(new FileReader("TestCases\\input20.txt"));
+            in_fp = new BufferedReader(new FileReader("TestCases\\input7.txt"));
             getChar();
             do {
                 lex();
