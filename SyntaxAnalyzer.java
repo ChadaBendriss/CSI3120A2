@@ -21,7 +21,7 @@ public class SyntaxAnalyzer {
      //public static boolean errorOccurredinput10 = false;
     public static void main(String[] args) {
         try {
-            LexicalAnalyzer.in_fp = new BufferedReader(new FileReader("TestCases\\input20.txt"));
+            LexicalAnalyzer.in_fp = new BufferedReader(new FileReader("TestCases\\input16.txt"));
             LexicalAnalyzer.getChar();
 
             do {
