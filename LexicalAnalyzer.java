@@ -51,6 +51,7 @@ public class LexicalAnalyzer {
     public static final int COLON = 42;
     public static final int LEFT_BRACKET = 43; 
     public static final int RIGHT_BRACKET = 44; 
+    public static final int UNCLOSED_STR_LIT = 45;
    
     public static int lineNum = 1;  // start from 1 since we start at the first line
 
@@ -178,17 +179,37 @@ public class LexicalAnalyzer {
                 addChar();
                 nextToken = COLON;
                 break;
+            // case '\"':
+            //     addChar();
+            //     getChar();
+            //     while (nextChar != '\"') {
+            //         addChar();
+            //         getChar();
+            //     }
+            //     addChar(); // Include the closing double quote
+                
+            //     nextToken = STR_LIT;
+            //     break;
+
             case '\"':
                 addChar();
                 getChar();
-                while (nextChar != '\"') {
+                while (nextChar != '\"' && nextChar != EOF) {
+                    if(nextChar == '\n'){ // If end of line is reached before the closing quote
+                        // Set an error code for unclosed string literal
+                        nextToken = UNCLOSED_STR_LIT;
+                        lexeme = new StringBuilder("Error - unclosed string literal");
+                        break; // Break out of the loop
+                    }
                     addChar();
                     getChar();
                 }
-                addChar(); // Include the closing double quote
-                
-                nextToken = STR_LIT;
+                if (nextToken != UNCLOSED_STR_LIT && nextChar == '\"') {
+                    addChar(); // Include the closing double quote
+                    nextToken = STR_LIT;
+                }
                 break;
+
             default:
                 addChar();
                 nextToken = EOF;

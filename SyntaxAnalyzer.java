@@ -17,6 +17,7 @@ public class SyntaxAnalyzer {
      private static boolean inforCond=false  ;
      public static boolean stackempty=true;
      public static boolean openparen=true;
+     public static boolean errorOccurred = false;
     public static void main(String[] args) {
         try {
             LexicalAnalyzer.in_fp = new BufferedReader(new FileReader("TestCases\\input7.txt"));
@@ -34,6 +35,14 @@ public class SyntaxAnalyzer {
                 }
                 
                 //System.out.println('x');
+
+                if (LexicalAnalyzer.nextToken == LexicalAnalyzer.UNCLOSED_STR_LIT) {
+                    System.err.println("Error - unclosed string literal");
+                    System.err.println("Syntax analysis failed.") ;
+                    errorOccurred = true;
+                    break;
+                  
+                }
                 
 
                 switch (token) {
@@ -128,26 +137,21 @@ public class SyntaxAnalyzer {
                              expectDataTypeOrIdent = false;
                              expectOperandOrDataType = false;
                              expectsemiColum = true;
-                        } else if(expectOperator && !expectOperandOrDataType && expectsemiColum ){
-                            System.out.println("Syntax analysis failed");
-                            System.err.println("Syntax error - String assignment error at line " + LexicalAnalyzer.lineNum);
-                            return;
-                        }
-                        
-                        else if(expectsemiColum && !expectOperandOrDataType){
-                            System.out.println("Syntax analysis failed.");
-                            System.err.println("syntax_analyzer_error - Missing semi colon at line " + LexicalAnalyzer.lineNum);
-                            return;
+                            }
+                            else if(expectsemiColum && !expectOperandOrDataType){
+                                System.err.println("Syntax error - Missing semi colon at line " + LexicalAnalyzer.lineNum);
+                                return;
+                            
+                            } else if(expectOperator && !expectOperandOrDataType ){
+                                System.err.println("Syntax error - String assignment error at line " + LexicalAnalyzer.lineNum);
+                                return;
+                            }
+                           
+                            else if (!expectOperandOrDataType) {
+                                System.err.println("Syntax error - Unexpected datatype declaration at line " + LexicalAnalyzer.lineNum);
+                                return;
+                            }
 
-                        }
-
-                        
-                        
-                        else if (!expectOperandOrDataType) {
-                            System.out.println("Syntax analysis failed");
-                            System.err.println("Syntax error - Unexpected datatype declaration at line " + LexicalAnalyzer.lineNum);
-                            return;
-                        }
                         expectOperandOrDataType = false;
                         expectOperator = true;
                         expectsemiColum = true;
@@ -304,6 +308,10 @@ public class SyntaxAnalyzer {
                         
                         break;
 
+                        case LexicalAnalyzer.UNCLOSED_STR_LIT:
+                        System.err.println("Error - unclosed string literal at line " + LexicalAnalyzer.lineNum);
+                        break;
+
                     
                 }
                 // for (int i=0;i<stack.size();i++){
@@ -323,14 +331,14 @@ public class SyntaxAnalyzer {
             //     System.out.println("Syntax analysis completed successfully!");
             // }
             
-            while (!stack.isEmpty()) {
+            while (!stack.isEmpty() && !errorOccurred ) {
                 int unmatchedToken = stack.pop();
                 System.out.println("Syntax analysis failed.");
                 //System.err.println("Error - Unmatched symbol " + unmatchedToken+" at the end of code  failed");
                 stackempty=false;
             }
 
-            if (stackempty ) {
+            if (stackempty && !errorOccurred ) {
                 System.out.println("Syntax analysis succeed");
             }
         } catch (IOException e) {
