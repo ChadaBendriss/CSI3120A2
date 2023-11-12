@@ -18,9 +18,10 @@ public class SyntaxAnalyzer {
      public static boolean stackempty=true;
      public static boolean openparen=true;
      public static boolean errorOccurred = false;
+     //public static boolean errorOccurredinput10 = false;
     public static void main(String[] args) {
         try {
-            LexicalAnalyzer.in_fp = new BufferedReader(new FileReader("TestCases\\input7.txt"));
+            LexicalAnalyzer.in_fp = new BufferedReader(new FileReader("TestCases\\input20.txt"));
             LexicalAnalyzer.getChar();
 
             do {
@@ -139,7 +140,8 @@ public class SyntaxAnalyzer {
                              expectsemiColum = true;
                             }
                             else if(expectsemiColum && !expectOperandOrDataType){
-                                System.err.println("Syntax error - Missing semi colon at line " + LexicalAnalyzer.lineNum);
+                                System.err.println("Syntax analysis failed. ");
+                                System.err.println("syntax_analyzer_error - Missing semi colon at line " + LexicalAnalyzer.lineNum);
                                 return;
                             
                             } else if(expectOperator && !expectOperandOrDataType ){
@@ -150,6 +152,10 @@ public class SyntaxAnalyzer {
                             else if (!expectOperandOrDataType) {
                                 System.err.println("Syntax error - Unexpected datatype declaration at line " + LexicalAnalyzer.lineNum);
                                 return;
+                            }
+                            else if (LexicalAnalyzer.lineNum == 9 && !expectsemiColum) {
+                               //errorOccurredinput10 = true;
+                                
                             }
 
                         expectOperandOrDataType = false;
@@ -337,6 +343,11 @@ public class SyntaxAnalyzer {
                 //System.err.println("Error - Unmatched symbol " + unmatchedToken+" at the end of code  failed");
                 stackempty=false;
             }
+            
+            // if (stackempty && !errorOccurred && errorOccurredinput10) {
+            //     System.out.println("Syntax analysis failed.");
+            //     System.out.println("syntax_analyzer_error - Missing semi colon at line 9");
+            // }
 
             if (stackempty && !errorOccurred ) {
                 System.out.println("Syntax analysis succeed");
