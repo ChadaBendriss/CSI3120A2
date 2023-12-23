@@ -8,12 +8,6 @@ Implement a syntax analyzer for a simplified programming language using a stack 
 - Ensure balanced parentheses, braces, brackets, and other symbols.
 - Support for functions, variables, data types, and arithmetic operations.
 
-## Tasks
-1. Implement a stack for symbol tracking.
-2. Ensure balanced use of various symbols.
-3. Handle functions, variables, and basic data types.
-4. Support arithmetic operations and semicolon terminations.
-
 ## Challenges
 - Stack Implementation.
 - Nested Structures.
